@@ -838,8 +838,13 @@
             completedVideos.clear();
             saveProgress();
             
-            // Clear entire session to start fresh
-            sessionStorage.removeItem('orderPayCompletedCourses');
+            // Remove current version from session completed courses
+            const sessionCompleted = getSessionCompletedCourses();
+            const indexToRemove = sessionCompleted.indexOf(currentVersion);
+            if (indexToRemove > -1) {
+                sessionCompleted.splice(indexToRemove, 1);
+                sessionStorage.setItem('orderPayCompletedCourses', JSON.stringify(sessionCompleted));
+            }
             
             renderVideoList();
             updateProgress();
