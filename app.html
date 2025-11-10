@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrderPay Training Platform - Professional Payment Training</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="src/styles/globals.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        border: 'hsl(216 34% 17%)',
+                        input: 'hsl(216 34% 17%)',
+                        ring: 'hsl(263 70% 50%)',
+                        background: 'hsl(224 71% 4%)',
+                        foreground: 'hsl(213 31% 91%)',
+                        primary: {
+                            DEFAULT: 'hsl(263 70% 50%)',
+                            foreground: 'hsl(210 40% 98%)',
+                        },
+                        secondary: {
+                            DEFAULT: 'hsl(222 47% 11%)',
+                            foreground: 'hsl(210 40% 98%)',
+                        },
+                        muted: {
+                            DEFAULT: 'hsl(223 47% 11%)',
+                            foreground: 'hsl(215.4 16.3% 56.9%)',
+                        },
+                        accent: {
+                            DEFAULT: 'hsl(216 34% 17%)',
+                            foreground: 'hsl(210 40% 98%)',
+                        },
+                        card: {
+                            DEFAULT: 'hsl(224 71% 4%)',
+                            foreground: 'hsl(213 31% 91%)',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes warp {
+            0% { transform: translateY(-100%) scaleY(0); }
+            50% { transform: translateY(0%) scaleY(1); }
+            100% { transform: translateY(100%) scaleY(0); }
+        }
+        .warp-beam {
+            animation: warp 3s linear infinite;
+        }
+        .warp-beam:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .warp-beam:nth-child(2) { left: 20%; animation-delay: 0.3s; }
+        .warp-beam:nth-child(3) { left: 30%; animation-delay: 0.6s; }
+        .warp-beam:nth-child(4) { left: 40%; animation-delay: 0.9s; }
+        .warp-beam:nth-child(5) { left: 50%; animation-delay: 1.2s; }
+        .warp-beam:nth-child(6) { left: 60%; animation-delay: 1.5s; }
+        .warp-beam:nth-child(7) { left: 70%; animation-delay: 1.8s; }
+        .warp-beam:nth-child(8) { left: 80%; animation-delay: 2.1s; }
+        .warp-beam:nth-child(9) { left: 90%; animation-delay: 2.4s; }
+
+        /* Signature Styles */
+        @keyframes wave-shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(147, 51, 234, 0.3),
+                           0 0 10px rgba(147, 51, 234, 0.2),
+                           0 0 15px rgba(147, 51, 234, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 10px rgba(147, 51, 234, 0.5),
+                           0 0 20px rgba(147, 51, 234, 0.3),
+                           0 0 30px rgba(147, 51, 234, 0.2);
+            }
+        }
+
+        .signature-text {
+            background: linear-gradient(
+                90deg,
+                rgba(167, 139, 250, 0.4) 0%,
+                rgba(167, 139, 250, 0.8) 25%,
+                rgba(192, 132, 252, 1) 50%,
+                rgba(167, 139, 250, 0.8) 75%,
+                rgba(167, 139, 250, 0.4) 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: wave-shimmer 3s linear infinite;
+        }
+
+        .signature-text:hover {
+            animation: wave-shimmer 1.5s linear infinite;
+        }
+
+        .signature-icon {
+            animation: spin-slow 8s linear infinite;
+        }
+
+        .signature-icon:hover {
+            animation: spin-slow 2s linear infinite, pulse-glow 1.5s ease-in-out infinite;
+        }
+
+        /* Signature Container with Metallic Edges */
+        .signature-container {
+            position: relative;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(30, 30, 30, 0.2) 100%);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .signature-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.3) 20%,
+                rgba(255, 255, 255, 0.6) 50%,
+                rgba(255, 255, 255, 0.3) 80%,
+                transparent 100%
+            );
+            animation: shimmer-edge 3s ease-in-out infinite;
+        }
+
+        .signature-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(0, 0, 0, 0.4) 20%,
+                rgba(0, 0, 0, 0.6) 50%,
+                rgba(0, 0, 0, 0.4) 80%,
+                transparent 100%
+            );
+        }
+
+        .signature-edge-left,
+        .signature-edge-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.2) 30%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.2) 70%,
+                transparent 100%
+            );
+        }
+
+        .signature-edge-left {
+            left: 0;
+            animation: edge-glow-left 4s ease-in-out infinite;
+        }
+
+        .signature-edge-right {
+            right: 0;
+            animation: edge-glow-right 4s ease-in-out infinite 2s;
+        }
+
+        @keyframes shimmer-edge {
+            0%, 100% {
+                opacity: 0.5;
+                transform: translateX(-100%);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes edge-glow-left {
+            0%, 100% {
+                opacity: 0.3;
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        @keyframes edge-glow-right {
+            0%, 100% {
+                opacity: 0.3;
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .signature-highlight {
+            position: absolute;
+            top: 50%;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(192, 132, 252, 0.4) 50%,
+                transparent 100%
+            );
+            animation: highlight-sweep 5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes highlight-sweep {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            50% {
+                left: 100%;
+                opacity: 1;
+            }
+            51% {
+                opacity: 0;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Accessibility Options */
+        .reduce-motion * {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        .high-contrast {
+            filter: contrast(1.3);
+        }
+
+        .large-text {
+            font-size: 1.125rem !important;
+        }
+
+        .large-text h1 { font-size: 2.5rem !important; }
+        .large-text h2 { font-size: 2rem !important; }
+        .large-text h3 { font-size: 1.75rem !important; }
+        .large-text .text-sm { font-size: 1rem !important; }
+        .large-text .text-xs { font-size: 0.95rem !important; }
+        .large-text .text-xl { font-size: 1.5rem !important; }
+        .large-text .text-5xl { font-size: 3.5rem !important; }
+        .large-text .text-6xl { font-size: 4rem !important; }
+
+    </style>
+    <script src="accessibility-manager.js"></script>
+    <script src="header-loader.js"></script>
+</head>
+<body class="min-h-screen text-foreground antialiased">
+    <!-- Warp Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="relative z-10 min-h-screen flex flex-col">
+        <!-- Shared Header -->
+        <div id="header-placeholder"></div>
+
+        <!-- Hero Section -->
+        <main class="flex-1 container mx-auto px-4 py-12 max-w-6xl">
+            <div class="text-center mb-16 space-y-4">
+                <div class="inline-block mb-4">
+                    <span class="px-3 py-1 text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full">
+                        New Release: OrderPay 22.7 Training Now Available!
+                    </span>
+                </div>
+                <h2 class="text-5xl md:text-6xl font-bold tracking-tight text-white">
+                    Training Videos for NCR Aloha OrderPay
+                </h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                    Comprehensive video training for NCR Aloha's wireless handheld payment solution.
+                    Learn at your own pace with experienced, step-by-step guidance.
+                </p>
+            </div>
+
+            <!-- Course Cards -->
+            <div class="grid md:grid-cols-2 gap-6 mb-16" id="coursesGrid">
+                <!-- Courses will be loaded here -->
+            </div>
+
+            <!-- Features Grid -->
+            <div class="mt-20">
+                <h3 class="text-2xl font-semibold text-center mb-10 text-foreground">Training courses to get you started and get the most out of OrderPay</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Feature 1 -->
+                    <div class="group p-6 rounded-lg border border-border bg-card/50 backdrop-blur-sm hover:bg-card/80 hover:border-purple-500/50 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 text-foreground">Self-Paced Learning</h4>
+                        <p class="text-sm text-muted-foreground leading-relaxed">
+                            Access all training videos immediately. Learn on your schedule without restrictions or time limits.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="group p-6 rounded-lg border border-border bg-card/50 backdrop-blur-sm hover:bg-card/80 hover:border-purple-500/50 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 text-foreground">Available Anytime</h4>
+                        <p class="text-sm text-muted-foreground leading-relaxed">
+                            All training content can be referenced at any time. Download the app for offline access to your courses.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="group p-6 rounded-lg border border-border bg-card/50 backdrop-blur-sm hover:bg-card/80 hover:border-purple-500/50 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 text-foreground">Track Progress</h4>
+                        <p class="text-sm text-muted-foreground leading-relaxed">
+                            Monitor your learning journey with automatic progress tracking and completion indicators.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Desktop App Downloads Section (Hidden in packaged apps) -->
+        <section id="downloads-section" class="container mx-auto px-4 py-16 max-w-6xl" style="display: none;">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Download Desktop App</h2>
+                <p class="text-muted-foreground max-w-2xl mx-auto">
+                    Install the training platform as a standalone Windows application for offline access
+                </p>
+            </div>
+
+            <div class="flex justify-center">
+                <div class="max-w-2xl w-full">
+                <!-- Electron Card -->
+                <div class="group relative overflow-hidden rounded-xl border-2 border-primary/50 bg-card/80 backdrop-blur-sm shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
+                    <div class="relative p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-foreground">OrderPay Training Desktop App</h3>
+                                    <p class="text-sm text-muted-foreground mt-1">Powered by Electron - Industry Standard</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6 p-4 rounded-lg bg-primary/10 border border-primary/30">
+                            <p class="text-sm text-foreground leading-relaxed">
+                                Self-contained Windows application with all training videos included. Works completely offline with automatic progress tracking and desktop shortcut for easy access.
+                            </p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <div>
+                                        <span class="text-sm font-medium text-foreground">Compressed File Size:</span>
+                                        <p class="text-xs text-muted-foreground">~150-180MB (zipped)</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <div>
+                                        <span class="text-sm font-medium text-foreground">Windows Compatibility:</span>
+                                        <p class="text-xs text-muted-foreground">Windows 10 or newer</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <div>
+                                        <span class="text-sm font-medium text-foreground">Requirements:</span>
+                                        <p class="text-xs text-muted-foreground">None - ready to install</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <span class="text-sm font-medium text-foreground">Desktop Shortcut:</span>
+                                        <p class="text-xs text-muted-foreground">Auto-created during install</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <span class="text-sm font-medium text-foreground">Install Location:</span>
+                                        <p class="text-xs text-muted-foreground">Choose your preferred folder</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <span class="text-sm font-medium text-foreground">Offline Access:</span>
+                                        <p class="text-xs text-muted-foreground">All videos bundled</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6 p-4 rounded-lg bg-secondary/50 border border-border">
+                            <h4 class="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Installation Instructions
+                            </h4>
+                            <ol class="space-y-2 text-sm text-muted-foreground">
+                                <li class="flex items-start gap-2">
+                                    <span class="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-primary/20 text-primary text-xs font-bold">1</span>
+                                    <span>Download the ZIP file below</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-primary/20 text-primary text-xs font-bold">2</span>
+                                    <span>Extract the ZIP file to access the installer</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-primary/20 text-primary text-xs font-bold">3</span>
+                                    <span>Right-click the installer and select <strong>"Run as administrator"</strong></span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-primary/20 text-primary text-xs font-bold">4</span>
+                                    <span>Follow the installation wizard (choose installation location if desired)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-primary/20 text-primary text-xs font-bold">5</span>
+                                    <span>Launch from the desktop shortcut or Start Menu</span>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <a href="releases/OrderPay-Training-Setup.zip" download class="block w-full py-4 px-6 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-700 text-white font-bold text-lg rounded-lg transition-all duration-200 text-center shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
+                            <div class="flex items-center justify-center gap-3">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                Download Windows Installer
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            // Show downloads section only when NOT running in a packaged app
+            (function() {
+                const isPackaged = (typeof nw !== 'undefined') ||
+                                  (typeof process !== 'undefined' && process.versions && process.versions.electron) ||
+                                  (window.location.protocol === 'file:' && window.location.pathname.includes('resources'));
+
+                if (!isPackaged) {
+                    document.getElementById('downloads-section').style.display = 'block';
+                }
+            })();
+        </script>
+
+        <!-- Footer -->
+        <footer class="border-t border-border/40 backdrop-blur-sm bg-background/30 mt-20">
+            <div class="container mx-auto px-4 py-8"><div class="relative z-10 border-t border-border/20 backdrop-blur-sm bg-background/20 py-8">
+            <div class="container mx-auto px-4 flex justify-center">
+                <div class="signature-container">
+                    <div class="signature-edge-left"></div>
+                    <div class="signature-edge-right"></div>
+                    <div class="signature-highlight"></div>
+                    <div class="flex items-center justify-center gap-3 text-xs relative z-10">
+                        <svg class="signature-icon w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="mobius-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:rgb(147,51,234);stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:rgb(168,85,247);stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:rgb(192,132,252);stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M50 10 C30 10, 20 25, 25 40 C30 55, 45 60, 50 70 C55 60, 70 55, 75 40 C80 25, 70 10, 50 10 Z"
+                                  fill="url(#mobius-gradient)" opacity="0.8"/>
+                            <path d="M50 30 C40 30, 35 37, 37 45 C39 53, 45 56, 50 60 C55 56, 61 53, 63 45 C65 37, 60 30, 50 30 Z"
+                                  fill="url(#mobius-gradient)" opacity="0.6"/>
+                            <ellipse cx="50" cy="50" rx="8" ry="12" fill="url(#mobius-gradient)" opacity="0.9"/>
+                        </svg>
+                        <p class="signature-text font-medium">
+                            by  Melody Guzman - 2025
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+        </footer>
+                <!--div class="text-center space-y-4">
+                    <h3 class="text-xl font-semibold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">
+                       Built for the Payroc POS Implementation team and all the clients and partners that put their trust in us
+                    </h3>
+                    <p class="text-sm text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                        OrderPay is a NCR Aloha POS wireless handheld Android-based payment solution.
+                        PayrocPOS is a reseller for NCR Aloha products leading the charge for OrderPay deployments.
+                        The video recordings, voice over scripts, video editing, and training platform logic and interface
+                        were engineered, designed, and developed by Melody Guzman, Product Specialist at PayrocPOS,
+                        adventurer, tech nerd, artist, curious cat, and jane of all trades who loves creating useful tools and
+                        content for others to enjoy and benefit from. Knowledge is meant to be shared for the benefit of all!<br />
+                        Recognition and thanks goes to Soap Effects for some of the intro and outro animations used in 22.7 videos.
+                    </p>
+                    <p class="text-xs text-muted-foreground">
+                    
+                    </p>
+                </div -->
+            
+
+        <!-- Signature -->
+        
+    </div>
+
+    <script>
+        // Load courses from JSON
+        async function loadCourses() {
+            try {
+                const response = await fetch('data/courses.json');
+                const data = await response.json();
+                renderCourses(data.courses);
+            } catch (error) {
+                console.error('Failed to load courses:', error);
+                // Fallback to hardcoded data
+                renderCourses({
+                    '22.5': {
+                        title: 'OrderPay 22.5',
+                        description: 'Essential training for NCR Aloha OrderPay 22.5. Does not include features in 22.6 like Saved Card. ',
+                        duration: '~45 minutes',
+                        videoCount: 7
+                    },
+                    '22.7': {
+                        title: 'OrderPay 22.7',
+                        description: 'Comprehensive training with advanced features and new capabilities',
+                        duration: '~60 minutes',
+                        videoCount: 11
+                    }
+                });
+            }
+        }
+
+        function renderCourses(courses) {
+            const grid = document.getElementById('coursesGrid');
+            grid.innerHTML = Object.entries(courses).map(([version, course]) => `
+                <div class="group relative overflow-hidden rounded-xl border border-border bg-card/50 backdrop-blur-sm hover:bg-card/80 hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
+                     onclick="goToCourse('${version}')">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative p-8">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <div class="inline-block px-2 py-1 text-xs font-medium bg-purple-500/20 text-purple-300 rounded mb-3">
+                                    Version ${version}
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 text-foreground group-hover:text-purple-300 transition-colors">
+                                    ${course.title}
+                                </h3>
+                                <p class="text-muted-foreground leading-relaxed mb-4">
+                                    ${course.description}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>${course.videoCount} Videos</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>${course.duration}</span>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 group-hover:shadow-lg group-hover:shadow-purple-500/50">
+                            Start Training
+                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function goToCourse(version) {
+            window.location.href = `course.html?version=${version}`;
+        }
+
+        // Initialize
+        loadCourses();
+    </script>
+</body>
+</html>

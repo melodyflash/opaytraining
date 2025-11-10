@@ -1,0 +1,112 @@
+{
+  "name": "orderpay-training",
+  "version": "1.0.0",
+  "description": "OrderPay Training Course - Self-contained desktop application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --win --mac --linux",
+    "start:nw": "nw .",
+    "build:nw": "node build-nwjs-manual.js",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
+  },
+  "keywords": [
+    "training",
+    "orderpay",
+    "electron"
+  ],
+  "author": "Melody Guzman",
+  "license": "MIT",
+  "window": {
+    "title": "OrderPay Training",
+    "icon": "assets/icon.png",
+    "width": 1400,
+    "height": 900,
+    "min_width": 1024,
+    "min_height": 768,
+    "position": "center",
+    "show": true,
+    "frame": true,
+    "resizable": true
+  },
+  "chromium-args": "--disable-web-security",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.orderpay.training",
+    "productName": "OrderPay Training",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "publisherName": "Melody Guzman - Payroc POS",
+      "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "OrderPay Training",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "menuCategory": true
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
+      "category": "public.app-category.education"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Education"
+    },
+    "files": [
+      "main.js",
+      "app.html",
+      "course.html",
+      "*.js",
+      "data/*",
+      "src/**/*",
+      "assets/**/*"
+    ],
+    "asarUnpack": [
+      "assets/videos/**/*"
+    ]
+  }
+}

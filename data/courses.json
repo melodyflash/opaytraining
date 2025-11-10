@@ -1,0 +1,146 @@
+{
+  "courses": {
+    "22.5": {
+      "title": "OrderPay 22.5",
+      "description": "Essential training for NCR Aloha OrderPay 22.5",
+      "duration": "~45 minutes",
+      "videoCount": 7,
+      "videos": [
+        {
+          "id": "22.5-01",
+          "title": "Login, Tabs & Tables",
+          "description": "Learn how to log in and navigate the tabs and tables interface",
+          "file": "orderpay225_01_loginTabsTables.mp4",
+          "duration": "6:30"
+        },
+        {
+          "id": "22.5-02",
+          "title": "Menu & Submenus",
+          "description": "Master the menu system, submenus, and modifier functions",
+          "file": "orderpay225_02_menuSubmenus.mp4",
+          "duration": "7:15"
+        },
+        {
+          "id": "22.5-03",
+          "title": "Ordering Functions",
+          "description": "Advanced ordering functions and features",
+          "file": "orderpay225_03_orderingFunctions.mp4",
+          "duration": "6:45"
+        },
+        {
+          "id": "22.5-04",
+          "title": "Check Screen",
+          "description": "Learn all the functions available on the check screen",
+          "file": "orderpay225_04_checkScreen.mp4",
+          "duration": "5:30"
+        },
+        {
+          "id": "22.5-05",
+          "title": "Payments & Server GCP",
+          "description": "Payment processing including server-led transactions and GCP integration",
+          "file": "orderpay225_05_paymentsServerGcp.mp4",
+          "duration": "8:00"
+        },
+        {
+          "id": "22.5-06",
+          "title": "Guest Check & Fast Access",
+          "description": "Quick access features for guest check presenter",
+          "file": "orderpay225_06_guestCheckFastAccess.mp4",
+          "duration": "5:45"
+        },
+        {
+          "id": "22.5-07",
+          "title": "Digital Receipts & Printer",
+          "description": "Managing digital receipts and printer configuration",
+          "file": "orderpay225_07_digitalReceiptsPrinter.mp4",
+          "duration": "6:00"
+        }
+      ]
+    },
+    "22.7": {
+      "title": "OrderPay 22.7",
+      "description": "Comprehensive training with advanced features and new capabilities",
+      "duration": "~60 minutes",
+      "videoCount": 11,
+      "videos": [
+        {
+          "id": "22.7-01",
+          "title": "Clock In & Tables",
+          "description": "Getting started with clock-in procedures and table management",
+          "file": "orderpay227_01_clockInTables.mp4",
+          "duration": "5:30"
+        },
+        {
+          "id": "22.7-02",
+          "title": "Menu & Ordering",
+          "description": "Navigate menus and place orders efficiently",
+          "file": "orderpay227_02_menuOrdering.mp4",
+          "duration": "6:00"
+        },
+        {
+          "id": "22.7-03",
+          "title": "Items & Modifiers",
+          "description": "Working with menu items and customization modifiers",
+          "file": "orderpay227_03_itemsModifiers.mp4",
+          "duration": "5:45"
+        },
+        {
+          "id": "22.7-04",
+          "title": "Check Screen",
+          "description": "Comprehensive check screen functions and features",
+          "file": "orderpay227_04_checkScreen.mp4",
+          "duration": "5:15"
+        },
+        {
+          "id": "22.7-05",
+          "title": "Advanced Ordering",
+          "description": "Advanced ordering techniques and special functions",
+          "file": "orderpay227_05_advancedOrdering.mp4",
+          "duration": "6:30"
+        },
+        {
+          "id": "22.7-06",
+          "title": "Advanced Functions - Split & Merge",
+          "description": "Split checks and merge table operations",
+          "file": "orderpay227_05b_advancedFunctionsSplitMerge.mp4",
+          "duration": "5:00"
+        },
+        {
+          "id": "22.7-07",
+          "title": "Tab Names, Saved Card & Search",
+          "description": "Managing tab names, saved cards, and search functionality",
+          "file": "orderpay227_06a_tabNamesSavedCardSearch.mp4",
+          "duration": "4:45"
+        },
+        {
+          "id": "22.7-08",
+          "title": "Tables & Saved Card",
+          "description": "Table management with saved card features",
+          "file": "orderpay227_06b_tablesSavedCard.mp4",
+          "duration": "4:30"
+        },
+        {
+          "id": "22.7-09",
+          "title": "Server Ledger & Payment Functions",
+          "description": "Server-led payment processing and ledger management",
+          "file": "orderpay227_07_serverLedPaymentFunctions.mp4",
+          "duration": "6:15"
+        },
+        {
+          "id": "22.7-10",
+          "title": "Guest Check, Presenter & Fast Access",
+          "description": "Guest check presenter features and fast access shortcuts",
+          "file": "orderpay227_08_guestCheckPresenterFastAccess.mp4",
+          "duration": "5:30"
+        },
+        {
+          "id": "22.7-11",
+          "title": "Close Checks & Receipts",
+          "description": "Closing checks, generating receipts, and vouchers",
+          "file": "orderpay227_09_closeChecksReceipts.mp4",
+          "duration": "5:00"
+        }
+      ]
+    }
+  }
+}

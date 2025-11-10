@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrderPay Training - Course</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="src/styles/globals.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        border: 'hsl(216 34% 17%)',
+                        input: 'hsl(216 34% 17%)',
+                        ring: 'hsl(263 70% 50%)',
+                        background: 'hsl(224 71% 4%)',
+                        foreground: 'hsl(213 31% 91%)',
+                        primary: {
+                            DEFAULT: 'hsl(263 70% 50%)',
+                            foreground: 'hsl(210 40% 98%)',
+                        },
+                        secondary: {
+                            DEFAULT: 'hsl(222 47% 11%)',
+                            foreground: 'hsl(210 40% 98%)',
+                        },
+                        muted: {
+                            DEFAULT: 'hsl(223 47% 11%)',
+                            foreground: 'hsl(215.4 16.3% 56.9%)',
+                        },
+                        accent: {
+                            DEFAULT: 'hsl(216 34% 17%)',
+                            foreground: 'hsl(210 40% 98%)',
+                        },
+                        card: {
+                            DEFAULT: 'hsl(224 71% 4%)',
+                            foreground: 'hsl(213 31% 91%)',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes warp {
+            0% { transform: translateY(-100%) scaleY(0); }
+            50% { transform: translateY(0%) scaleY(1); }
+            100% { transform: translateY(100%) scaleY(0); }
+        }
+        .warp-beam {
+            animation: warp 3s linear infinite;
+        }
+        .warp-beam:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .warp-beam:nth-child(2) { left: 20%; animation-delay: 0.3s; }
+        .warp-beam:nth-child(3) { left: 30%; animation-delay: 0.6s; }
+        .warp-beam:nth-child(4) { left: 40%; animation-delay: 0.9s; }
+        .warp-beam:nth-child(5) { left: 50%; animation-delay: 1.2s; }
+        .warp-beam:nth-child(6) { left: 60%; animation-delay: 1.5s; }
+        .warp-beam:nth-child(7) { left: 70%; animation-delay: 1.8s; }
+        .warp-beam:nth-child(8) { left: 80%; animation-delay: 2.1s; }
+        .warp-beam:nth-child(9) { left: 90%; animation-delay: 2.4s; }
+
+        /* Phone frame styling - Premium metallic black */
+        .phone-frame {
+            aspect-ratio: 9/16;
+            max-width: 380px;
+            border-radius: 2.5rem;
+            border: 12px solid #0a0a0a;
+            background: linear-gradient(145deg, #1a1a1a, #000000);
+            box-shadow:
+                /* Outer glow */
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                0 0 0 2px #0a0a0a,
+                /* Metallic highlights */
+                inset 0 1px 2px rgba(255, 255, 255, 0.15),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.5),
+                /* Depth shadows */
+                0 20px 30px -5px rgba(0, 0, 0, 0.6),
+                0 10px 15px -5px rgba(0, 0, 0, 0.4),
+                /* Inner metallic edge */
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        /* Metallic edge highlights */
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            right: -12px;
+            bottom: -12px;
+            border-radius: 2.5rem;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.2) 0%,
+                transparent 20%,
+                transparent 80%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Chrome/metallic bezel effect */
+        .phone-frame::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 2.4rem;
+            background: linear-gradient(to bottom,
+                rgba(255, 255, 255, 0.12),
+                transparent 30%,
+                transparent 70%,
+                rgba(0, 0, 0, 0.3)
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .phone-frame video {
+            border-radius: 2rem;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: hsl(223 47% 11%);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: hsl(263 70% 50%);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: hsl(263 70% 60%);
+        }
+
+        /* Signature Styles */
+        @keyframes wave-shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(147, 51, 234, 0.3),
+                           0 0 10px rgba(147, 51, 234, 0.2),
+                           0 0 15px rgba(147, 51, 234, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 10px rgba(147, 51, 234, 0.5),
+                           0 0 20px rgba(147, 51, 234, 0.3),
+                           0 0 30px rgba(147, 51, 234, 0.2);
+            }
+        }
+
+        .signature-text {
+            background: linear-gradient(
+                90deg,
+                rgba(167, 139, 250, 0.4) 0%,
+                rgba(167, 139, 250, 0.8) 25%,
+                rgba(192, 132, 252, 1) 50%,
+                rgba(167, 139, 250, 0.8) 75%,
+                rgba(167, 139, 250, 0.4) 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: wave-shimmer 3s linear infinite;
+        }
+
+        .signature-text:hover {
+            animation: wave-shimmer 1.5s linear infinite;
+        }
+
+        .signature-icon {
+            animation: spin-slow 8s linear infinite;
+        }
+
+        .signature-icon:hover {
+            animation: spin-slow 2s linear infinite, pulse-glow 1.5s ease-in-out infinite;
+        }
+
+        /* Signature Container with Metallic Edges */
+        .signature-container {
+            position: relative;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(30, 30, 30, 0.2) 100%);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .signature-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.3) 20%,
+                rgba(255, 255, 255, 0.6) 50%,
+                rgba(255, 255, 255, 0.3) 80%,
+                transparent 100%
+            );
+            animation: shimmer-edge 3s ease-in-out infinite;
+        }
+
+        .signature-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(0, 0, 0, 0.4) 20%,
+                rgba(0, 0, 0, 0.6) 50%,
+                rgba(0, 0, 0, 0.4) 80%,
+                transparent 100%
+            );
+        }
+
+        .signature-edge-left,
+        .signature-edge-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.2) 30%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.2) 70%,
+                transparent 100%
+            );
+        }
+
+        .signature-edge-left {
+            left: 0;
+            animation: edge-glow-left 4s ease-in-out infinite;
+        }
+
+        .signature-edge-right {
+            right: 0;
+            animation: edge-glow-right 4s ease-in-out infinite 2s;
+        }
+
+        @keyframes shimmer-edge {
+            0%, 100% {
+                opacity: 0.5;
+                transform: translateX(-100%);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes edge-glow-left {
+            0%, 100% {
+                opacity: 0.3;
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        @keyframes edge-glow-right {
+            0%, 100% {
+                opacity: 0.3;
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .signature-highlight {
+            position: absolute;
+            top: 50%;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(192, 132, 252, 0.4) 50%,
+                transparent 100%
+            );
+            animation: highlight-sweep 5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes highlight-sweep {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            50% {
+                left: 100%;
+                opacity: 1;
+            }
+            51% {
+                opacity: 0;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Accessibility Options */
+        .reduce-motion * {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        .high-contrast {
+            filter: contrast(1.3);
+        }
+
+        .large-text {
+            font-size: 1.125rem !important;
+        }
+
+        .large-text h1 { font-size: 2rem !important; }
+        .large-text h2 { font-size: 1.75rem !important; }
+        .large-text h3 { font-size: 1.5rem !important; }
+        .large-text .text-sm { font-size: 1rem !important; }
+        .large-text .text-xs { font-size: 0.95rem !important; }
+
+        /* Celebration Overlay */
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .celebration-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.95), rgba(168, 85, 247, 0.95));
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            pointer-events: auto;
+            text-align: center;
+            animation: celebrationPopIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .celebration-message h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+        }
+
+        .celebration-message p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 30px 0;
+        }
+
+        .celebration-message button {
+            background: white;
+            color: #9333ea;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .celebration-message button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes celebrationPopIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confettiFall 3s linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: fireworkExplode 1s ease-out forwards;
+        }
+
+        @keyframes fireworkExplode {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+    </style>
+    <script src="accessibility-manager.js"></script>
+    <script src="header-loader.js"></script>
+</head>
+<body class="min-h-screen text-foreground antialiased">
+    <!-- Warp Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+        <div class="warp-beam absolute w-0.5 h-full bg-gradient-to-b from-transparent via-purple-400/40 to-transparent opacity-30"></div>
+    </div>
+
+    <!-- Celebration Overlay -->
+    <div id="celebrationOverlay" class="celebration-overlay"></div>
+
+    <!-- Main Content -->
+    <div class="relative z-10 min-h-screen">
+        <!-- Shared Header -->
+        <div id="header-placeholder"></div>
+
+        <!-- Course Sub-Header -->
+        <div class="border-b border-border/40 backdrop-blur-sm bg-background/30 sticky top-[73px] z-40">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <button onclick="goHome()" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-secondary hover:bg-accent transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <span class="text-sm font-medium">Back</span>
+                        </button>
+                        <div>
+                            <h2 id="courseTitle" class="text-lg font-semibold text-foreground">OrderPay Training</h2>
+                            <p id="courseDesc" class="text-xs text-muted-foreground"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="container mx-auto px-4 py-6">
+            <div class="grid lg:grid-cols-[1fr_320px] gap-6">
+                <!-- Video Section -->
+                <div class="space-y-4">
+                    <!-- Progress Indicator -->
+                    <div class="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-base font-semibold text-purple-300">
+                            <span id="progress">0</span>/<span id="total">0</span> Complete
+                        </span>
+                    </div>
+
+                    <!-- Video Player -->
+                    <div class="rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6 relative">
+                        <!-- Navigation Buttons - Positioned at corners -->
+                        <button onclick="previousVideo()" id="prevBtn" disabled class="absolute top-4 left-4 z-10 flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-border bg-secondary/90 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-all backdrop-blur-sm min-w-[140px]">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <span class="font-medium">Previous</span>
+                        </button>
+                        <button onclick="nextVideo()" id="nextBtn" disabled class="absolute top-4 right-4 z-10 flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-purple-600/90 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-white backdrop-blur-sm min-w-[140px]">
+                            <span class="font-medium">Next</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+
+                        <!-- Video Title Above Player -->
+                        <div class="mb-6 text-center">
+                            <div class="inline-block px-4 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                                <div class="text-sm font-semibold text-purple-300" id="videoTitleOverlay">Select a video to begin</div>
+                            </div>
+                        </div>
+                        <!-- Phone Frame -->
+                        <div class="phone-frame mx-auto">
+                            <video id="mainVideo" controls class="w-full h-full">
+                                <source id="videoSource" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+
+                    <!-- Video Info -->
+                    <div class="rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6">
+                        <h2 id="videoTitle" class="text-2xl font-bold text-foreground mb-2">Select a video</h2>
+                        <p id="videoDescription" class="text-muted-foreground">Choose a video from the list to start watching</p>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="flex flex-col gap-4 h-full">
+                    <!-- Progress Card -->
+                    <div class="rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6 flex-shrink-0">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-semibold text-foreground">Your Progress</h3>
+                            <span class="text-sm font-medium text-purple-300"><span id="progressPercent">0</span>%</span>
+                        </div>
+                        <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
+                            <div id="progressFill" class="h-full bg-gradient-to-r from-purple-500 to-violet-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Video List -->
+                    <div class="rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6 flex flex-col flex-1">
+                        <h3 class="font-semibold text-foreground mb-4">Course Videos</h3>
+                        <div id="videoList" class="space-y-2 flex-1 overflow-y-auto pr-2">
+                            <!-- Videos will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signature -->
+        <div class="relative z-10 border-t border-border/20 backdrop-blur-sm bg-background/20 py-8 mt-12">
+            <div class="container mx-auto px-4 flex justify-center">
+                <div class="signature-container">
+                    <div class="signature-edge-left"></div>
+                    <div class="signature-edge-right"></div>
+                    <div class="signature-highlight"></div>
+                    <div class="flex items-center justify-center gap-3 text-xs relative z-10">
+                        <svg class="signature-icon w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="mobius-gradient-course" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:rgb(147,51,234);stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:rgb(168,85,247);stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:rgb(192,132,252);stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M50 10 C30 10, 20 25, 25 40 C30 55, 45 60, 50 70 C55 60, 70 55, 75 40 C80 25, 70 10, 50 10 Z"
+                                  fill="url(#mobius-gradient-course)" opacity="0.8"/>
+                            <path d="M50 30 C40 30, 35 37, 37 45 C39 53, 45 56, 50 60 C55 56, 61 53, 63 45 C65 37, 60 30, 50 30 Z"
+                                  fill="url(#mobius-gradient-course)" opacity="0.6"/>
+                            <ellipse cx="50" cy="50" rx="8" ry="12" fill="url(#mobius-gradient-course)" opacity="0.9"/>
+                        </svg>
+                        <p class="signature-text font-medium">
+                            Content and platform designed and deployed by Melody Guzman - Product Specialist @ Payroc POS - 2025
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const videoData = {
+            '22.5': [
+                { title: 'Login, Tabs & Tables', file: 'orderpay225_01_loginTabsTables.mp4', description: 'Learn how to log in and navigate tables' },
+                { title: 'Menu screen: Submenus, Items, & Modifiers', file: 'orderpay225_02_menuSubmenus.mp4', description: 'Menu screen, items & modifier screen functions' },
+                { title: 'Ordering Functions', file: 'orderpay225_03_orderingFunctions.mp4', description: 'Advanced ordering features' },
+                { title: 'Check Screen', file: 'orderpay225_04_checkScreen.mp4', description: 'Navigate the check screen functions' },
+                { title: 'Server-led & Check Presenter checkouts', file: 'orderpay225_05_paymentsServerGcp.mp4', description: 'Payment screen. Table-Side server-led payment or customer self-checkout options' },
+                { title: 'Guest Check & Fast Access', file: 'orderpay225_06_guestCheckFastAccess.mp4', description: 'Quick access features' },
+                { title: 'Digital Receipts & Printer', file: 'orderpay225_07_digitalReceiptsPrinter.mp4', description: 'Manage receipts and printers' }
+            ],
+            '22.7': [
+                { title: 'Clock In & Tables', file: 'orderpay227_01_clockInTables.mp4', description: 'Clock-in and table management' },
+                { title: 'Menu & Ordering', file: 'orderpay227_02_menuOrdering.mp4', description: 'Menu navigation and ordering' },
+                { title: 'Items & Modifiers', file: 'orderpay227_03_itemsModifiers.mp4', description: 'Item customization with modifiers' },
+                { title: 'Check Screen', file: 'orderpay227_04_checkScreen.mp4', description: 'Check screen operations' },
+                { title: 'Advanced Ordering', file: 'orderpay227_05_advancedOrdering.mp4', description: 'Advanced ordering techniques' },
+                { title: 'Advanced Functions - Split & Merge', file: 'orderpay227_05b_advancedFunctionsSplitMerge.mp4', description: 'Split and merge operations' },
+                { title: 'Tab Names, Saved Card & Search', file: 'orderpay227_06a_tabNamesSavedCardSearch.mp4', description: 'Tab and search features' },
+                { title: 'Tables & Saved Card', file: 'orderpay227_06b_tablesSavedCard.mp4', description: 'Table management with saved cards' },
+                { title: 'Server-led Payment Functions', file: 'orderpay227_07_serverLedPaymentFunctions.mp4', description: 'Server Table-Side Checkout' },
+                { title: 'Guest Check Presenter & Fast Access', file: 'orderpay227_08_guestCheckPresenterFastAccess.mp4', description: 'Customer Self Checkout' },
+                { title: 'Close Checks & Receipts', file: 'orderpay227_09_closeChecksReceipts.mp4', description: 'Closing checks and receipts' }
+            ]
+        };
+
+        let currentVersion = '22.7';
+        let currentVideoIndex = 0;
+        let completedVideos = new Set();
+
+        // Load saved progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem(`orderPayProgress_${currentVersion}`);
+            if (saved) {
+                completedVideos = new Set(JSON.parse(saved));
+            }
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            localStorage.setItem(`orderPayProgress_${currentVersion}`, JSON.stringify([...completedVideos]));
+        }
+
+        function init() {
+
+            // Get version from URL parameter
+            const params = new URLSearchParams(window.location.search);
+            currentVersion = params.get('version') || '22.7';
+
+            // Load saved progress
+            loadProgress();
+
+            // Update UI
+            document.getElementById('courseTitle').textContent = `OrderPay ${currentVersion} Training`;
+            const videos = videoData[currentVersion];
+            document.getElementById('courseDesc').textContent = `${videos.length} training videos`;
+            document.getElementById('total').textContent = videos.length;
+
+            // Render video list
+            renderVideoList();
+
+            // Load first video
+            if (videos.length > 0) {
+                loadVideo(0);
+            }
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', handleKeyboard);
+
+            // Track video completion
+            const videoElement = document.getElementById('mainVideo');
+            videoElement.addEventListener('timeupdate', trackVideoProgress);
+        }
+
+        function handleKeyboard(e) {
+            if (e.key === 'ArrowLeft' && !document.getElementById('prevBtn').disabled) {
+                previousVideo();
+            } else if (e.key === 'ArrowRight' && !document.getElementById('nextBtn').disabled) {
+                nextVideo();
+            }
+        }
+
+        function trackVideoProgress() {
+            const video = document.getElementById('mainVideo');
+            if (video.duration > 0) {
+                const progress = (video.currentTime / video.duration) * 100;
+                // Mark as completed when 95% watched
+                if (progress >= 95 && !completedVideos.has(currentVideoIndex)) {
+                    completedVideos.add(currentVideoIndex);
+                    saveProgress();
+                    renderVideoList();
+                    updateProgress();
+
+                    // Check for course completion
+                    checkCourseCompletion();
+                }
+            }
+        }
+
+        // Session storage for tracking completion across versions in same session
+        function getSessionCompletedCourses() {
+            const completed = sessionStorage.getItem('orderPayCompletedCourses');
+            return completed ? JSON.parse(completed) : [];
+        }
+
+        function saveSessionCompletedCourse(version) {
+            const completed = getSessionCompletedCourses();
+            if (!completed.includes(version)) {
+                completed.push(version);
+                sessionStorage.setItem('orderPayCompletedCourses', JSON.stringify(completed));
+            }
+        }
+
+        function checkCourseCompletion() {
+            const videos = videoData[currentVersion];
+            const allCompleted = completedVideos.size === videos.length;
+
+            if (allCompleted) {
+                const sessionCompleted = getSessionCompletedCourses();
+                const isNewCompletion = !sessionCompleted.includes(currentVersion);
+
+                if (isNewCompletion) {
+                    saveSessionCompletedCourse(currentVersion);
+
+                    // Check if both courses completed
+                    const bothCoursesCompleted = sessionCompleted.length + 1 >= 2;
+
+                    if (bothCoursesCompleted) {
+                        setTimeout(() => showFireworks(), 1000);
+                    } else {
+                        setTimeout(() => showConfetti(), 1000);
+                    }
+                }
+            }
+        }
+
+        function renderVideoList() {
+            const videos = videoData[currentVersion];
+            const listHTML = videos.map((video, index) => {
+                const isActive = index === currentVideoIndex;
+                const isCompleted = completedVideos.has(index);
+
+                return `
+                    <button onclick="loadVideo(${index})"
+                            class="w-full text-left px-3 py-3 rounded-lg border transition-all duration-200 ${
+                                isActive
+                                    ? 'border-purple-500 bg-purple-500/20'
+                                    : 'border-border bg-secondary/50 hover:bg-secondary'
+                            }">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full ${
+                                isCompleted ? 'bg-green-500' : 'bg-muted'
+                            } flex items-center justify-center text-xs font-semibold">
+                                ${isCompleted ? '✓' : index + 1}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="font-medium text-sm ${isActive ? 'text-purple-300' : 'text-foreground'} truncate">
+                                    ${video.title}
+                                </div>
+                                <div class="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                                    ${video.description || ''}
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+            document.getElementById('videoList').innerHTML = listHTML;
+        }
+
+        function loadVideo(index) {
+            const videos = videoData[currentVersion];
+            if (index < 0 || index >= videos.length) return;
+
+            currentVideoIndex = index;
+            const video = videos[index];
+
+            // Update video source
+            const source = document.getElementById('videoSource');
+            source.src = `assets/videos/${currentVersion}/${video.file}`;
+
+            // Update info
+            document.getElementById('videoTitle').textContent = `${index + 1}. ${video.title}`;
+            document.getElementById('videoDescription').textContent = video.description || `Video ${index + 1} of ${videos.length}`;
+
+            // Update overlay title on video player
+            document.getElementById('videoTitleOverlay').textContent = `${index + 1}. ${video.title}`;
+
+            // Update buttons
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === videos.length - 1;
+
+            // Reload video
+            const videoElement = document.getElementById('mainVideo');
+            videoElement.load();
+
+            // Re-render list
+            renderVideoList();
+
+            // Update progress
+            updateProgress();
+
+            // Scroll video into view on mobile
+            if (window.innerWidth < 1024) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function previousVideo() {
+            if (currentVideoIndex > 0) {
+                loadVideo(currentVideoIndex - 1);
+            }
+        }
+
+        function nextVideo() {
+            const videos = videoData[currentVersion];
+            if (currentVideoIndex < videos.length - 1) {
+                loadVideo(currentVideoIndex + 1);
+            }
+        }
+
+        function updateProgress() {
+            const videos = videoData[currentVersion];
+            const completed = completedVideos.size;
+            const total = videos.length;
+            const percent = Math.round((completed / total) * 100);
+
+            document.getElementById('progress').textContent = completed;
+            document.getElementById('progressPercent').textContent = percent;
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        function goHome() {
+            window.location.href = 'app.html';
+        }
+
+        function showConfetti() {
+            const overlay = document.getElementById('celebrationOverlay');
+            overlay.classList.remove('hidden');
+            overlay.innerHTML = '';
+
+            // Create 100 confetti pieces
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+
+                // Random colors
+                const colors = ['#a78bfa', '#c084fc', '#e879f9', '#fbbf24', '#60a5fa', '#34d399'];
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                // Random position and delay
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+
+                overlay.appendChild(confetti);
+            }
+
+            // Remove after animation completes
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                overlay.innerHTML = '';
+            }, 6000);
+        }
+
+        function showFireworks() {
+            const overlay = document.getElementById('celebrationOverlay');
+            overlay.classList.remove('hidden');
+            overlay.innerHTML = '';
+
+            // Create congratulations message
+            const message = document.createElement('div');
+            message.className = 'celebration-message';
+            message.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 20px;">🎉</div>
+                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 10px; color: white;">Congratulations!</h2>
+                <p style="font-size: 1.2rem; color: rgba(255, 255, 255, 0.95);">
+                    You've completed both OrderPay training courses!
+                </p>
+                <p style="font-size: 1rem; margin-top: 15px; color: rgba(255, 255, 255, 0.8);">
+                    Click anywhere to create fireworks! 🎆
+                </p>
+            `;
+            overlay.appendChild(message);
+
+            // Create fireworks on click
+            let fireworkCount = 0;
+            const maxFireworks = 50;
+
+            function createFirework(x, y) {
+                if (fireworkCount >= maxFireworks) return;
+                fireworkCount++;
+
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = x + 'px';
+                firework.style.top = y + 'px';
+
+                // Create particles
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'firework-particle';
+
+                    const angle = (Math.PI * 2 * i) / 30;
+                    const velocity = 100 + Math.random() * 100;
+                    const tx = Math.cos(angle) * velocity;
+                    const ty = Math.sin(angle) * velocity;
+
+                    particle.style.setProperty('--tx', tx + 'px');
+                    particle.style.setProperty('--ty', ty + 'px');
+
+                    // Random colors
+                    const colors = ['#a78bfa', '#c084fc', '#e879f9', '#fbbf24', '#60a5fa', '#34d399', '#f87171'];
+                    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                    firework.appendChild(particle);
+                }
+
+                overlay.appendChild(firework);
+
+                // Remove after animation
+                setTimeout(() => firework.remove(), 1000);
+            }
+
+            // Auto-create some fireworks
+            const autoFireworks = [
+                { delay: 500, x: window.innerWidth * 0.2, y: window.innerHeight * 0.3 },
+                { delay: 800, x: window.innerWidth * 0.8, y: window.innerHeight * 0.4 },
+                { delay: 1200, x: window.innerWidth * 0.5, y: window.innerHeight * 0.2 },
+                { delay: 1600, x: window.innerWidth * 0.3, y: window.innerHeight * 0.6 },
+                { delay: 2000, x: window.innerWidth * 0.7, y: window.innerHeight * 0.5 }
+            ];
+
+            autoFireworks.forEach(fw => {
+                setTimeout(() => createFirework(fw.x, fw.y), fw.delay);
+            });
+
+            // Click to create more fireworks
+            overlay.addEventListener('click', (e) => {
+                createFirework(e.clientX, e.clientY);
+            });
+
+            // Close button after a delay
+            setTimeout(() => {
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = 'Continue Training';
+                closeBtn.style.cssText = `
+                    position: fixed;
+                    bottom: 40px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 15px 40px;
+                    background: linear-gradient(135deg, #a78bfa, #c084fc);
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                    z-index: 10001;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                `;
+                closeBtn.onmouseover = () => {
+                    closeBtn.style.transform = 'translateX(-50%) scale(1.05)';
+                    closeBtn.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.4)';
+                };
+                closeBtn.onmouseout = () => {
+                    closeBtn.style.transform = 'translateX(-50%) scale(1)';
+                    closeBtn.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+                };
+                closeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    overlay.classList.add('hidden');
+                    overlay.innerHTML = '';
+                    fireworkCount = 0;
+                };
+                overlay.appendChild(closeBtn);
+            }, 3000);
+        }
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>
