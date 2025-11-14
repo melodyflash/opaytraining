@@ -5,14 +5,14 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder",
+    "build": "mkdir -p public && cp index.html course.html public/ && cp -r assets data src public/ && cp header-loader.js accessibility-manager.js public/",
+    "build:electron": "electron-builder",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
     "build:linux": "electron-builder --linux",
     "build:all": "electron-builder --win --mac --linux",
     "start:nw": "nw .",
     "build:nw": "node build-nwjs-manual.js",
-    "build:vercel": "mkdir -p public && cp -r index.html course.html assets data src header-loader.js accessibility-manager.js public/",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build"

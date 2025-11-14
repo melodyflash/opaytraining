@@ -1,4 +1,0 @@
-{
-  "buildCommand": "mkdir -p public && cp -r index.html course.html assets data src header-loader.js accessibility-manager.js public/",
-  "outputDirectory": "public"
-}
